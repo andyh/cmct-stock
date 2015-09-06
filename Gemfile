@@ -24,7 +24,7 @@ gem "simple_form"
 gem "title"
 gem "uglifier"
 gem "clearance"
-gem "haml"
+gem "haml-rails"
 
 group :development, :test do
   gem "awesome_print"
