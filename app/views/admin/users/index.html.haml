@@ -1,0 +1,23 @@
+%h1 User Management
+
+%table.tables
+  %thead
+    %tr
+      %th Name
+      %th Role
+      %th Status
+      %th
+
+  %tbody
+    - @users.each do |user|
+      %tr
+        %td= user.full_name
+        %td= user.role.humanize
+        %td= user.active? ? "Active" : "Disabled"
+        %td
+          = link_to 'Edit', edit_admin_user_path(user), class: "button"
+          = link_to 'Destroy', admin_user_path(user), :method => :delete, :data => { :confirm => 'Are you sure?' }, class: "button button--destroy"
+
+%br
+
+= link_to 'New User', new_admin_user_path, class: "button"

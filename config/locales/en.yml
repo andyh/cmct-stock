@@ -16,4 +16,15 @@ en:
         "%B %d"
 
   titles:
-    application: Cmct
+    application: CMCT
+  helpers:
+    submit:
+      user:
+        create: "Create User"
+  user:
+    create:
+      success: User was successfully created.
+    update:
+      success: User was successfully updated.
+    delete:
+      success: User was successfully deleted.
