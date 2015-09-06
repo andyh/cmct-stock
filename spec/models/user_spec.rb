@@ -3,8 +3,7 @@ require "rails_helper"
 RSpec.describe User do
   it { should validate_presence_of(:first_name) }
   it { should validate_presence_of(:last_name) }
-  it { should validate_inclusion_of(:role)
-         .in_array(%w{admin stockholder manager}) }
+  it { should validate_inclusion_of(:role).in_array(%w{admin stockholder manager}) }
 
   describe "#full_name" do
     it "returns the users full name" do
@@ -14,4 +13,3 @@ RSpec.describe User do
     end
   end
 end
-
