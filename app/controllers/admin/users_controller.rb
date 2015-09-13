@@ -1,5 +1,7 @@
 class Admin::UsersController < ApplicationController
+  # before_action :require_login
   before_action :set_user, only: [:edit, :update, :destroy]
+  before_action :protect_self, only: [:destroy]
 
   def index
     @users = User.all
@@ -32,7 +34,7 @@ class Admin::UsersController < ApplicationController
 
   def destroy
     @user.destroy
-    redirect_to admin_users_url, notice: t("user.delete.success")
+    redirect_to admin_users_url, notice: t("user.delete.success", user: @user.full_name)
   end
 
   private
@@ -42,5 +44,12 @@ class Admin::UsersController < ApplicationController
 
   def user_params
     params.require(:user).permit(%w{first_name last_name email password role active})
+  end
+
+  def protect_self
+    if current_user == @user
+      flash.alert = t("user.remove_self_attempt.failure")
+      redirect_to admin_users_url
+    end
   end
 end
