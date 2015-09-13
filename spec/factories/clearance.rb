@@ -23,4 +23,12 @@ FactoryGirl.define do
     password "password"
     role "admin"
   end
+
+  trait :manager do
+    role "manager"
+  end
+
+  trait :stockholder do
+    role "stockholder"
+  end
 end

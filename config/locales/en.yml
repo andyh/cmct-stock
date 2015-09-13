@@ -31,6 +31,7 @@ en:
     remove_self_attempt:
       failure: You cannot remove your own user account
 
+  unauthorised_access: You are not authorized to perform this action
   admin:
     users:
       page_title: User Management

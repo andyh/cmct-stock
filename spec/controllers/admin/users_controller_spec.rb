@@ -46,121 +46,171 @@ RSpec.describe Admin::UsersController, type: :controller do
   # UsersController. Be sure to keep this updated too.
   let(:valid_session) { {} }
 
-  describe "GET #index" do
-    it "assigns all users as @users" do
-      user = User.create! valid_attributes
-      get :index, {}, valid_session
-      expect(assigns(:users)).to eq([user])
+
+  describe "user access" do
+    before do
+      sign_in_as(user)
+      get :index
+    end
+
+    context "no user logged in" do
+      let(:user) { nil }
+
+      it { is_expected.to redirect_to sign_in_path }
+      it { is_expected.to set_flash[:notice].to("You need to be logged in") }
+    end
+
+    context "for admin user" do
+      let(:user) { FactoryGirl.create(:admin) }
+
+      it "has a current_user" do
+        expect(controller.current_user).to eq(user)
+      end
+
+      it { is_expected.to respond_with(:success) }
+      it { is_expected.not_to set_flash }
+    end
+
+    context "for stockholders" do
+      let(:user) { FactoryGirl.create(:user, :stockholder) }
+
+      it "has a current_user" do
+        expect(controller.current_user).to eq(user)
+      end
+      it { is_expected.to redirect_to root_path }
+      it { is_expected.to set_flash[:alert].to( t("unauthorised_access") ) }
+    end
+
+    context "for managers" do
+      let(:user) { FactoryGirl.create(:user, :manager) }
+
+      it "has a current_user" do
+        expect(controller.current_user).to eq(user)
+      end
+      it { is_expected.to redirect_to root_path }
+      it { is_expected.to set_flash[:alert].to( t("unauthorised_access")) }
     end
   end
 
-  describe "GET #new" do
-    it "assigns a new user as @user" do
-      get :new, {}, valid_session
-      expect(assigns(:user)).to be_a_new(User)
-    end
-  end
-
-  describe "GET #edit" do
-    it "assigns the requested user as @user" do
-      user = User.create! valid_attributes
-      get :edit, {id: user.to_param}, valid_session
-      expect(assigns(:user)).to eq(user)
-    end
-  end
-
-  describe "POST #create" do
-    context "with valid params" do
-      it "creates a new User" do
-        expect {
-          post :create, {user: valid_attributes}, valid_session
-        }.to change(User, :count).by(1)
-      end
-
-      it "assigns a newly created user as @user" do
-        post :create, {user: valid_attributes}, valid_session
-        expect(assigns(:user)).to be_a(User)
-        expect(assigns(:user)).to be_persisted
-      end
-
-      it "redirects to the users list" do
-        post :create, {user: valid_attributes}, valid_session
-        expect(response).to redirect_to admin_users_path
+  context "As admin" do
+    let(:admin) { FactoryGirl.create(:admin) }
+    before { sign_in_as(admin) }
+    describe "GET #index" do
+      it "assigns all users as @users" do
+        user = User.create! valid_attributes
+        get :index, {}, valid_session
+        expect(assigns(:users)).to match_array([admin, user])
       end
     end
 
-    context "with invalid params" do
-      it "assigns a newly created but unsaved user as @user" do
-        post :create, {user: invalid_attributes}, valid_session
+    describe "GET #new" do
+      it "assigns a new user as @user" do
+        get :new, {}, valid_session
         expect(assigns(:user)).to be_a_new(User)
       end
-
-      it "re-renders the 'new' template" do
-        post :create, {user: invalid_attributes}, valid_session
-        expect(response).to render_template("new")
-      end
     end
-  end
 
-  describe "PUT #update" do
-    context "with valid params" do
-      let(:new_attributes) {
-        {
-          first_name: "Steve",
-          last_name: "Rogers",
-          email: "steve@example.com",
-        }
-      }
-
-      it "updates the requested user" do
-        user = User.create! valid_attributes
-        put :update, {id: user.to_param, user: new_attributes}, valid_session
-        user.reload
-        expect(user.first_name).to eq("Steve")
-        expect(user.last_name).to eq("Rogers")
-        expect(user.email).to eq("steve@example.com")
-      end
-
+    describe "GET #edit" do
       it "assigns the requested user as @user" do
         user = User.create! valid_attributes
-        put :update, {id: user.to_param, user: valid_attributes}, valid_session
+        get :edit, {id: user.to_param}, valid_session
         expect(assigns(:user)).to eq(user)
+      end
+    end
+
+    describe "POST #create" do
+      context "with valid params" do
+        it "creates a new User" do
+          expect {
+            post :create, {user: valid_attributes}, valid_session
+          }.to change(User, :count).by(1)
+        end
+
+        it "assigns a newly created user as @user" do
+          post :create, {user: valid_attributes}, valid_session
+          expect(assigns(:user)).to be_a(User)
+          expect(assigns(:user)).to be_persisted
+        end
+
+        it "redirects to the users list" do
+          post :create, {user: valid_attributes}, valid_session
+          expect(response).to redirect_to admin_users_path
+        end
+      end
+
+      context "with invalid params" do
+        it "assigns a newly created but unsaved user as @user" do
+          post :create, {user: invalid_attributes}, valid_session
+          expect(assigns(:user)).to be_a_new(User)
+        end
+
+        it "re-renders the 'new' template" do
+          post :create, {user: invalid_attributes}, valid_session
+          expect(response).to render_template("new")
+        end
+      end
+    end
+
+    describe "PUT #update" do
+      context "with valid params" do
+        let(:new_attributes) {
+          {
+            first_name: "Steve",
+            last_name: "Rogers",
+            email: "steve@example.com",
+          }
+        }
+
+        it "updates the requested user" do
+          user = User.create! valid_attributes
+          put :update, {id: user.to_param, user: new_attributes}, valid_session
+          user.reload
+          expect(user.first_name).to eq("Steve")
+          expect(user.last_name).to eq("Rogers")
+          expect(user.email).to eq("steve@example.com")
+        end
+
+        it "assigns the requested user as @user" do
+          user = User.create! valid_attributes
+          put :update, {id: user.to_param, user: valid_attributes}, valid_session
+          expect(assigns(:user)).to eq(user)
+        end
+
+        it "redirects to the users list" do
+          user = User.create! valid_attributes
+          put :update, {id: user.to_param, user: valid_attributes}, valid_session
+          expect(response).to redirect_to(admin_users_path)
+        end
+      end
+
+      context "with invalid params" do
+        it "assigns the user as @user" do
+          user = User.create! valid_attributes
+          put :update, {id: user.to_param, user: invalid_attributes}, valid_session
+          expect(assigns(:user)).to eq(user)
+        end
+
+        it "re-renders the 'edit' template" do
+          user = User.create! valid_attributes
+          put :update, {id: user.to_param, user: invalid_attributes}, valid_session
+          expect(response).to render_template("edit")
+        end
+      end
+    end
+
+    describe "DELETE #destroy" do
+      it "destroys the requested user" do
+        user = User.create! valid_attributes
+        expect {
+          delete :destroy, {id: user.to_param}, valid_session
+        }.to change(User, :count).by(-1)
       end
 
       it "redirects to the users list" do
         user = User.create! valid_attributes
-        put :update, {id: user.to_param, user: valid_attributes}, valid_session
-        expect(response).to redirect_to(admin_users_path)
-      end
-    end
-
-    context "with invalid params" do
-      it "assigns the user as @user" do
-        user = User.create! valid_attributes
-        put :update, {id: user.to_param, user: invalid_attributes}, valid_session
-        expect(assigns(:user)).to eq(user)
-      end
-
-      it "re-renders the 'edit' template" do
-        user = User.create! valid_attributes
-        put :update, {id: user.to_param, user: invalid_attributes}, valid_session
-        expect(response).to render_template("edit")
-      end
-    end
-  end
-
-  describe "DELETE #destroy" do
-    it "destroys the requested user" do
-      user = User.create! valid_attributes
-      expect {
         delete :destroy, {id: user.to_param}, valid_session
-      }.to change(User, :count).by(-1)
-    end
-
-    it "redirects to the users list" do
-      user = User.create! valid_attributes
-      delete :destroy, {id: user.to_param}, valid_session
-      expect(response).to redirect_to(admin_users_url)
+        expect(response).to redirect_to(admin_users_url)
+      end
     end
   end
 

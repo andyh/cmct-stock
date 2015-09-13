@@ -25,6 +25,7 @@ gem "title"
 gem "uglifier"
 gem "clearance"
 gem "haml-rails"
+gem "pundit"
 
 group :development, :test do
   gem "awesome_print"

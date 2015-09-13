@@ -1,6 +1,6 @@
-class Admin::UsersController < ApplicationController
-  # before_action :require_login
+class Admin::UsersController < AuthenticatedController
   before_action :set_user, only: [:edit, :update, :destroy]
+  before_action :authorize_resource
   before_action :protect_self, only: [:destroy]
 
   def index
@@ -51,5 +51,13 @@ class Admin::UsersController < ApplicationController
       flash.alert = t("user.remove_self_attempt.failure")
       redirect_to admin_users_url
     end
+  end
+
+   def authorize_resource
+    authorize resource
+  end
+
+  def resource
+    @user || User
   end
 end
