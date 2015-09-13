@@ -11,10 +11,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150905132946) do
+ActiveRecord::Schema.define(version: 20150913145152) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "brands", force: :cascade do |t|
+    t.string   "name",       default: "", null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
+
+  create_table "categories", force: :cascade do |t|
+    t.string   "name",       default: "", null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+  end
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",   default: 0, null: false
@@ -32,6 +44,20 @@ ActiveRecord::Schema.define(version: 20150905132946) do
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
+  create_table "products", force: :cascade do |t|
+    t.string   "name",                                 default: "",  null: false
+    t.integer  "brand_id",                                           null: false
+    t.integer  "category_id",                                        null: false
+    t.string   "size",                                 default: ""
+    t.text     "description",                          default: ""
+    t.decimal  "price",       precision: 10, scale: 2, default: 0.0, null: false
+    t.datetime "created_at",                                         null: false
+    t.datetime "updated_at",                                         null: false
+  end
+
+  add_index "products", ["brand_id"], name: "index_products_on_brand_id", using: :btree
+  add_index "products", ["category_id"], name: "index_products_on_category_id", using: :btree
+
   create_table "users", force: :cascade do |t|
     t.datetime "created_at",                                             null: false
     t.datetime "updated_at",                                             null: false
@@ -48,4 +74,6 @@ ActiveRecord::Schema.define(version: 20150905132946) do
   add_index "users", ["email"], name: "index_users_on_email", using: :btree
   add_index "users", ["remember_token"], name: "index_users_on_remember_token", using: :btree
 
+  add_foreign_key "products", "brands"
+  add_foreign_key "products", "categories"
 end

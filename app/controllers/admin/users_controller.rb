@@ -53,10 +53,6 @@ class Admin::UsersController < AuthenticatedController
     end
   end
 
-   def authorize_resource
-    authorize resource
-  end
-
   def resource
     @user || User
   end

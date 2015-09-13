@@ -1,0 +1,27 @@
+%h1= t("admin.products.page_title")
+
+%table.tables
+  %thead
+    %tr
+      %th Name
+      %th Brand
+      %th Category
+      %th Size
+      %th Description
+      %th Price
+      %th
+
+  %tbody
+    - @products.each do |product|
+      %tr
+        %td= product.name
+        %td= product.brand_name
+        %td= product.category_name
+        %td= product.size
+        %td= product.description.truncate_words(5)
+        %td= product.price
+        %td= link_to "Edit", edit_admin_product_path(product), class: "button"
+
+%br
+
+= link_to "New Product", new_admin_product_path, class: "button"

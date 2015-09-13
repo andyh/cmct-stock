@@ -14,6 +14,10 @@ class AuthenticatedController < ApplicationController
     super
   end
 
+  def authorize_resource
+    authorize resource
+  end
+
   def user_not_authorized
     redirect_to(root_path, alert: t("unauthorised_access")) and return
   end
