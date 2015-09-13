@@ -24,7 +24,8 @@ gem "simple_form"
 gem "title"
 gem "uglifier"
 gem "clearance"
-gem "haml"
+gem "haml-rails"
+gem "pundit"
 
 group :development, :test do
   gem "awesome_print"
@@ -45,6 +46,7 @@ group :test do
   gem "simplecov", require: false
   gem "timecop"
   gem "webmock"
+  gem "codeclimate-test-reporter", require: nil
 end
 
 group :staging, :production do

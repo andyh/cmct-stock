@@ -1,4 +1,4 @@
-#{$all-buttons} {
+#{$all-buttons}, .button {
   appearance: none;
   background-color: $action-color;
   border: 0;
@@ -31,5 +31,16 @@
     &:hover {
       background-color: $action-color;
     }
+  }
+}
+
+.button--edit {
+}
+
+.button--destroy {
+  background-color: $danger;
+
+  &:hover {
+  background-color: shade($danger, 20%);
   }
 }
