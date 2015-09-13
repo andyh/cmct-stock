@@ -31,3 +31,6 @@ en:
     remove_self_attempt:
       failure: You cannot remove your own user account
 
+  admin:
+    users:
+      page_title: User Management
