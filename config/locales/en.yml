@@ -37,3 +37,10 @@ en:
       page_title: User Management
     products:
       page_title: Product Management
+
+  dashboard:
+    index:
+      no_stock: You are currently holding no stock
+      stock_info: "You are currently holding £%{value} worth of stock"
+      sales_info: "You have sold £%{value} of stock"
+      payment_info: "You have paid over £%{value} to CMCT"

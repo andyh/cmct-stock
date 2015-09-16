@@ -1,0 +1,22 @@
+%article.type-system-geometric
+  %h1 Welcome #{ current_user.first_name }
+
+  %ul.bullets
+    %li.bullet
+      .bullet-icon.bullet-icon-1
+        %i.fa.fa-archive.fa-lg
+      .bullet-content
+        %h2 Stock
+        %p= t(".no_stock")
+    %li.bullet
+      .bullet-icon.bullet-icon-2
+        %i.fa.fa-gbp.fa-lg
+      .bullet-content
+        %h2 Sales
+        %p= t(".sales_info", value: 0)
+    %li.bullet
+      .bullet-icon.bullet-icon-3
+        %i.fa.fa-money.fa-lg
+      .bullet-content
+        %h2 Payments
+        %p= t(".payment_info", value: 0)
