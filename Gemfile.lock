@@ -107,6 +107,8 @@ GEM
     faker (1.5.0)
       i18n (~> 0.5)
     flutie (2.0.0)
+    font-awesome-sass (4.4.0)
+      sass (>= 3.2)
     formulaic (0.3.0)
       activesupport
       capybara
@@ -293,6 +295,7 @@ DEPENDENCIES
   factory_girl_rails
   faker
   flutie
+  font-awesome-sass
   formulaic
   haml-rails
   high_voltage
