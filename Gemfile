@@ -27,6 +27,7 @@ gem "clearance"
 gem "haml-rails"
 gem "pundit"
 gem "seed-fu"
+gem "font-awesome-sass"
 
 group :development, :test do
   gem "awesome_print"
