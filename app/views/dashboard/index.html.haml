@@ -7,7 +7,10 @@
         %i.fa.fa-archive.fa-lg
       .bullet-content
         %h2 Stock
-        %p= t(".no_stock")
+        - if @stock_amount.zero?
+          %p= t(".no_stock")
+        - else
+          %p= t(".stock_info", value: number_to_currency(@stock_amount))
     %li.bullet
       .bullet-icon.bullet-icon-2
         %i.fa.fa-gbp.fa-lg
