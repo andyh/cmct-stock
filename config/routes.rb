@@ -15,6 +15,8 @@ Rails.application.routes.draw do
   get "/sign_up" => "clearance/users#new", as: "sign_up"
 
   get "/welcome" => "dashboard#index", as: "dashboard"
+
+  resources :stock, only: %i(new create index)
   namespace :admin do
     resources :users, except: %i(show)
     resources :products, except: %i(show destroy)

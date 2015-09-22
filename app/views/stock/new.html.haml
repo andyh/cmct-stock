@@ -1,0 +1,10 @@
+%article.type-system-geometric
+  %h1 Add Stock
+
+  %fieldset
+    = simple_form_for @stock, url: stock_index_path do |f|
+      = f.input :product_id, collection: Product.all
+      = f.input :quantity
+
+      = f.button :submit, "Add Stock"
+

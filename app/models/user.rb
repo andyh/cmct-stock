@@ -1,6 +1,8 @@
 class InvalidRole < StandardError; end
 
 class User < ActiveRecord::Base
+  has_many :stock, -> { includes(:product) }
+  has_many :products, through: :stock
 
   include Clearance::User
   VALID_ROLES = %w{stockholder manager admin}

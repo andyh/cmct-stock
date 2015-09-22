@@ -10,3 +10,30 @@
 @import "refills/type-system-geometric";
 @import "refills/flashes";
 @import "refills/icon-bullet-points";
+@import "select2";
+
+$mobile-width: 480px;
+$tablet-width: 760px;
+
+$tablet: new-breakpoint(min-width $mobile-width max-width $tablet-width);
+$desktop: new-breakpoint(min-width $tablet-width);
+
+
+.grid-row {
+  @include outer-container;
+
+  .grid-cell {
+    @include span-columns(12);
+    @include media($tablet) {
+      @include span-columns(6);
+    }
+
+    @include media($desktop) {
+      @include span-columns(6);
+    }
+  }
+
+  .grid-single-cell {
+    @include span-columns(12);
+  }
+}

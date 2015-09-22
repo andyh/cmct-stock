@@ -28,6 +28,9 @@ gem "haml-rails"
 gem "pundit"
 gem "seed-fu"
 gem "font-awesome-sass"
+gem "interactor"
+gem "virtus"
+gem "select2-rails"
 
 group :development, :test do
   gem "awesome_print"
